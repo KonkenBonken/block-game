@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useDraggable from 'use-draggable-hook';
 
+import getRandomShape from '../shapes';
 import scss from '../styles/_board.module.scss';
 
 const getBoard = () => {
@@ -17,14 +18,16 @@ const getGridPos = (x: number, y: number) => {
 };
 
 export default function Block({ placeBlock }: { placeBlock(shape: boolean[][], x: number, y: number): boolean }) {
-  const shape = [[true, true], [true, true]];
+  const [shape, setShape] = useState(getRandomShape);
 
   const { target: dragRef, position: [x, y] } = useDraggable<HTMLDivElement>({
     onEnd(_, [x, y], setPos) {
       const [gridX, gridY] = getGridPos(x, y);
       if (gridX >= 0 && gridY >= 0)
-        if (placeBlock(shape, gridX, gridY))
+        if (placeBlock(shape, gridX, gridY)) {
           setPos([0, 0]);
+          setShape(getRandomShape);
+        }
     }
   });
 
