@@ -27,3 +27,11 @@
   filter: saturate(1.5) brightness(.7);
   overflow: visible !important;
 }
+
+.ghost {
+  @include square;
+  filter: saturate(.5) opacity(.3);
+  position: fixed;
+  top: calc(5vmin + var(--y) * 9vmin);
+  left: calc((100vmax - 90vmin) * 0.7 + var(--x) * 9vmin);
+}
