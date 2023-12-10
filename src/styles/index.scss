@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Holtwood+One+SC&display=swap');
+
 html,
 body,
 #root {
@@ -7,7 +9,9 @@ body,
   background-color: #f2f1eb;
 
   > h1 {
+    font-family: 'Holtwood One SC',sans-serif;
     font-size: 5rem;
+    color: darken(#88AB8E, 20);
   }
 
   &,
