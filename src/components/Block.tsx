@@ -9,13 +9,24 @@ const getBoard = () => {
     vmin = Math.min(document.body.clientWidth, document.body.clientHeight);
   return [(vmax - vmin * .9) * .7, vmin, vmax] as const;
 };
-
-export default function Block() {
-  const { target: dragRef, position: [x, y] } = useDraggable<HTMLDivElement>();
-
+const getGridPos = (x: number, y: number) => {
   const [boardX, vmin] = getBoard(),
     gridX = Math.round((x - boardX) / (vmin * .09)),
     gridY = Math.round((y - vmin * .05) / (vmin * .09));
+  return [gridX, gridY];
+};
+
+export default function Block({ placeBlock }: { placeBlock(x: number, y: number): boolean }) {
+  const { target: dragRef, position: [x, y] } = useDraggable<HTMLDivElement>({
+    onEnd(_, [x, y], setPos) {
+      const [gridX, gridY] = getGridPos(x, y);
+      if (gridX >= 0 && gridY >= 0)
+        if (placeBlock(gridX, gridY))
+          setPos([0, 0]);
+    }
+  });
+
+  const [gridX, gridY] = getGridPos(x, y);
 
   return (<>
     {gridX >= 0 && gridY >= 0 && <Ghost x={gridX} y={gridY} />}
