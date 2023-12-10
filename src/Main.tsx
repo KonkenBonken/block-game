@@ -1,11 +1,11 @@
 import React from 'react';
 
-import scss from './styles/_main.module.scss';
+import Board from './components/Board';
 
 export default function Main() {
-  return (
-    <h1 className={scss.header}>
-      Hello World
-    </h1>
-  );
+
+  return (<>
+    <h1>Block Game</h1>
+    <Board ref={rectRef} />
+  </>);
 }
