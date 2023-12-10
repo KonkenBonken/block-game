@@ -16,6 +16,15 @@ export default function Main() {
       for (let cell = 0; cell < shape[row].length; cell++)
         grid[y + row][x + cell] ||= shape[row][cell];
 
+    for (let row = 0; row < 10; row++)
+      if (grid[row].every(Boolean))
+        grid[row] = Array(10).fill(false);
+
+    for (let col = 0; col < 10; col++)
+      if (grid.map(row => row[col]).every(Boolean))
+        for (let row = 0; row < 10; row++)
+          grid[row][col] = false;
+
     setGrid([...grid]);
     return true;
   }
