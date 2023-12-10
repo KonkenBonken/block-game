@@ -32,6 +32,14 @@
   > div {
     @include square;
     position: absolute;
+    &.destroyed {
+      animation: destroyed forwards 300ms ease-in;
+      @keyframes destroyed {
+        to {
+          scale: 0;
+        }
+      }
+    }
   }
 }
 
@@ -53,8 +61,18 @@
   position: fixed;
   top: calc(5vmin + var(--y) * 9vmin);
   left: calc((100vmax - 90vmin) * 0.7 + var(--x) * 9vmin);
-  background-image: 
-            repeating-linear-gradient(to right, #0008 0, #0000 .1vmin, #0000 8.9vmin, #0008 9vmin),
-            repeating-linear-gradient(to bottom, #0008 0, #0000 .1vmin, #0000 8.9vmin, #0008 9vmin);
-
+  background-image: repeating-linear-gradient(
+      to right,
+      #0008 0,
+      #0000 0.1vmin,
+      #0000 8.9vmin,
+      #0008 9vmin
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      #0008 0,
+      #0000 0.1vmin,
+      #0000 8.9vmin,
+      #0008 9vmin
+    );
 }

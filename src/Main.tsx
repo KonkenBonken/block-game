@@ -5,7 +5,7 @@ import Board from './components/Board';
 import Block from './components/Block';
 
 export default function Main() {
-  const [grid, setGrid] = useState<boolean[][]>(Array(10).fill(0).map(() => Array(10).fill(false)));
+  const [grid, setGrid] = useState<(boolean | 'destroyed')[][]>(Array(10).fill(0).map(() => Array(10).fill(false)));
 
   function placeBlock(shape: boolean[][], x: number, y: number) {
     for (let row = 0; row < shape.length; row++)
@@ -18,13 +18,23 @@ export default function Main() {
         grid[y + row][x + cell] ||= shape[row][cell];
 
     for (let row = 0; row < 10; row++)
-      if (grid[row].every(Boolean))
-        grid[row] = Array(10).fill(false);
+      if (grid[row].every(Boolean)) {
+        grid[row] = Array(10).fill('destroyed');
+        setTimeout(() => {
+          grid[row] = Array(10).fill(false);
+          setGrid([...grid]);
+        }, 300);
+      }
 
     for (let col = 0; col < 10; col++)
       if (grid.map(row => row[col]).every(Boolean))
-        for (let row = 0; row < 10; row++)
-          grid[row][col] = false;
+        for (let row = 0; row < 10; row++) {
+          grid[row][col] = 'destroyed';
+          setTimeout(() => {
+            grid[row][col] = false;
+            setGrid([...grid]);
+          }, 300);
+        }
 
     setGrid([...grid]);
     return true;
