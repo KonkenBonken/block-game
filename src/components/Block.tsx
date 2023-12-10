@@ -16,12 +16,14 @@ const getGridPos = (x: number, y: number) => {
   return [gridX, gridY];
 };
 
-export default function Block({ placeBlock }: { placeBlock(x: number, y: number): boolean }) {
+export default function Block({ placeBlock }: { placeBlock(shape: boolean[][], x: number, y: number): boolean }) {
+  const shape = [[true, true], [true, true]];
+
   const { target: dragRef, position: [x, y] } = useDraggable<HTMLDivElement>({
     onEnd(_, [x, y], setPos) {
       const [gridX, gridY] = getGridPos(x, y);
       if (gridX >= 0 && gridY >= 0)
-        if (placeBlock(gridX, gridY))
+        if (placeBlock(shape, gridX, gridY))
           setPos([0, 0]);
     }
   });
@@ -29,15 +31,25 @@ export default function Block({ placeBlock }: { placeBlock(x: number, y: number)
   const [gridX, gridY] = getGridPos(x, y);
 
   return (<>
-    {gridX >= 0 && gridY >= 0 && <Ghost x={gridX} y={gridY} />}
-    <div className={scss.block} ref={dragRef} />
+    {gridX >= 0 && gridY >= 0 && <Ghost shape={shape} gridX={gridX} gridY={gridY} />}
+    <div className={scss.block} ref={dragRef}>
+      {shape.flatMap((row, y) => row.map((cell, x) => cell && (
+        <div key={`${x}${y}`}
+          style={{
+            '--x': x, '--y': y
+          } as React.CSSProperties} />
+      )))}
+    </div>
   </>);
 }
 
-function Ghost({ x, y }: { x: number, y: number }) {
-  return <div className={scss.ghost}
-    style={{
-      '--x': x, '--y': y
-    } as React.CSSProperties}
-  />;
+function Ghost({ shape, gridX, gridY }: { shape: boolean[][], gridX: number, gridY: number }) {
+  return (<>
+    {shape.flatMap((row, y) => row.map((cell, x) => cell && (
+      <div className={scss.ghost}
+        style={{
+          '--x': x + gridX, '--y': y + gridY
+        } as React.CSSProperties}
+      />)))}
+  </>);
 }
