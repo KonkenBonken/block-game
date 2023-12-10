@@ -16,6 +16,8 @@ const getGridPos = (x: number, y: number) => {
     gridY = Math.round((y - vmin * .05) / (vmin * .09));
   return [gridX, gridY];
 };
+const isInGrid = (shape: boolean[][], gridX: number, gridY: number) =>
+  gridX >= 0 && gridY >= 0 && gridX + shape[0].length <= 10 && gridY + shape.length <= 10;
 
 export default function Block({ placeBlock }: { placeBlock(shape: boolean[][], x: number, y: number): boolean }) {
   const [shape, setShape] = useState(getRandomShape);
@@ -23,7 +25,7 @@ export default function Block({ placeBlock }: { placeBlock(shape: boolean[][], x
   const { target: dragRef, position: [x, y] } = useDraggable<HTMLDivElement>({
     onEnd(_, [x, y], setPos) {
       const [gridX, gridY] = getGridPos(x, y);
-      if (gridX >= 0 && gridY >= 0)
+      if (isInGrid(shape, gridX, gridY))
         if (placeBlock(shape, gridX, gridY)) {
           setPos([0, 0]);
           setShape(getRandomShape);
@@ -34,7 +36,7 @@ export default function Block({ placeBlock }: { placeBlock(shape: boolean[][], x
   const [gridX, gridY] = getGridPos(x, y);
 
   return (<>
-    {gridX >= 0 && gridY >= 0 && <Ghost shape={shape} gridX={gridX} gridY={gridY} />}
+    {isInGrid(shape, gridX, gridY) && <Ghost shape={shape} gridX={gridX} gridY={gridY} />}
     <div className={scss.block} ref={dragRef}>
       {shape.flatMap((row, y) => row.map((cell, x) => cell && (
         <div key={`${x}${y}`}
