@@ -11,7 +11,15 @@ const raw = [
     )
   );
 
+function rotate(shape: boolean[][]) {
+  return shape[0].map((_, col) => shape.map(row => row[col]));
+}
 
 export default function getRandomShape() {
-  return shapes[Math.floor(Math.random() * shapes.length)];
+  let shape = shapes[Math.floor(Math.random() * shapes.length)];
+
+  for (let i = 0; i < Math.floor(Math.random() * 4); i++)
+    shape = rotate(shape);
+
+  return shape;
 }
