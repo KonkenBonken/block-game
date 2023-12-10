@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useDraggable from 'use-draggable-hook';
 
 import getRandomShape from '../shapes';
@@ -19,19 +19,28 @@ const getGridPos = (x: number, y: number) => {
 const isInGrid = (shape: boolean[][], gridX: number, gridY: number) =>
   gridX >= 0 && gridY >= 0 && gridX + shape[0].length <= 10 && gridY + shape.length <= 10;
 
-export default function Block({ placeBlock }: { placeBlock(shape: boolean[][], x: number, y: number): boolean }) {
-  const [shape, setShape] = useState(getRandomShape);
+export default function Block({ placeBlock, n }: { n: number, placeBlock(shape: boolean[][], x: number, y: number): boolean }) {
+  const [shape, setShape] = useState(getRandomShape),
+    [N, setN] = useState([n]);
 
-  const { target: dragRef, position: [x, y] } = useDraggable<HTMLDivElement>({
-    onEnd(_, [x, y], setPos) {
+  const { target: dragRef, position: [x, y], setPosition: setPos } = useDraggable<HTMLDivElement>({
+    onEnd(_, [x, y]) {
       const [gridX, gridY] = getGridPos(x, y);
       if (isInGrid(shape, gridX, gridY))
         if (placeBlock(shape, gridX, gridY)) {
-          setPos([0, 0]);
           setShape(getRandomShape);
+          setN([n]);
         }
     }
   });
+
+  useEffect(() => {
+    const [n] = N,
+      [_, vmin, vmax] = getBoard(),
+      x = (vmax - vmin * .9) * .3 - shape[0].length * (vmin * .045),
+      y = vmax * .2 + (vmax * (.8 / 6) * n) - shape.length * (vmin * .045);
+    setPos([x, y]);
+  }, [N]);
 
   const [gridX, gridY] = getGridPos(x, y);
 
@@ -51,7 +60,7 @@ export default function Block({ placeBlock }: { placeBlock(shape: boolean[][], x
 function Ghost({ shape, gridX, gridY }: { shape: boolean[][], gridX: number, gridY: number }) {
   return (<>
     {shape.flatMap((row, y) => row.map((cell, x) => cell && (
-      <div className={scss.ghost}
+      <div className={scss.ghost} key={`${x}${y}`}
         style={{
           '--x': x + gridX, '--y': y + gridY
         } as React.CSSProperties}

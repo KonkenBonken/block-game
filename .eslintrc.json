@@ -13,6 +13,7 @@
     "import/no-anonymous-default-export": "off",
     "no-var": "off",
     "no-loop-func": "off",
+    "react-hooks/exhaustive-deps": "off",
     "semi": "warn",
     "semi-spacing": "warn",
     "semi-style": "warn",

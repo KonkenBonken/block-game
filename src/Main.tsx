@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import scss from './styles/_panel.module.scss';
 import Board from './components/Board';
 import Block from './components/Block';
 
@@ -30,8 +31,12 @@ export default function Main() {
   }
 
   return (<>
-    <h1>Block Game</h1>
     <Board grid={grid} />
-    <Block placeBlock={placeBlock} />
+    <div className={scss.panel}>
+      <h1>Blockz</h1>
+      <Block placeBlock={placeBlock} n={0} />
+      <Block placeBlock={placeBlock} n={1} />
+      <Block placeBlock={placeBlock} n={2} />
+    </div>
   </>);
 }
