@@ -1,3 +1,9 @@
+@mixin square {
+  width: 9vmin;
+  height: 9vmin;
+  background-color: #88AB8E;
+}
+
 .board {
   position: fixed;
   left: calc((100vmax - 90vmin) * 0.7);
@@ -7,11 +13,17 @@
   background-color: #EEE7DA;
   
   > div {
-    width: 9vmin;
-    height: 9vmin;
+    @include square;
     position: absolute;
     top: calc(var(--y) * 9vmin);
     left: calc(var(--x) * 9vmin);
-    background-color: #88AB8E;
   }
+}
+
+.block {
+  @include square;
+  top:0;
+  position: fixed;
+  filter: saturate(1.5) brightness(.7);
+  overflow: visible !important;
 }
