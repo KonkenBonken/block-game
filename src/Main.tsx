@@ -47,6 +47,8 @@ export default function Main() {
         combo++;
       }
 
+    score += combo * 100;
+
     if (combo >= 2) {
       score *= combo;
       setComboText(combo);
