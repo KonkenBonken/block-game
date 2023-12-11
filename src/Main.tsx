@@ -6,7 +6,9 @@ import Block from './components/Block';
 
 export default function Main() {
   const [grid, setGrid] = useState<(boolean | 'destroyed')[][]>(Array(10).fill(0).map(() => Array(10).fill(false)));
-  const [score, setScore] = useState(0);
+
+  const [score, setScore] = useState(0),
+    [comboText, setComboText] = useState<false | number>(false);
 
   function placeBlock(shape: boolean[][], x: number, y: number) {
     for (let row = 0; row < shape.length; row++)
@@ -14,11 +16,13 @@ export default function Main() {
         if (shape[row][cell] && grid[y + row][x + cell])
           return false;
 
+    let score = 0, combo = 0;
+
     for (let row = 0; row < shape.length; row++)
       for (let cell = 0; cell < shape[row].length; cell++)
         grid[y + row][x + cell] ||= shape[row][cell];
 
-    setScore(prev => prev + shape.flat().filter(Boolean).length ** 2);
+    score += shape.flat().filter(Boolean).length ** 2;
 
     for (let row = 0; row < 10; row++)
       if (grid[row].every(Boolean)) {
@@ -27,10 +31,11 @@ export default function Main() {
           grid[row] = Array(10).fill(false);
           setGrid([...grid]);
         }, 300);
+        combo++;
       }
 
     for (let col = 0; col < 10; col++)
-      if (grid.map(row => row[col]).every(Boolean))
+      if (grid.map(row => row[col]).every(Boolean)) {
         for (let row = 0; row < 10; row++) {
           grid[row][col] = 'destroyed';
           setTimeout(() => {
@@ -38,6 +43,17 @@ export default function Main() {
             setGrid([...grid]);
           }, 300);
         }
+        combo++;
+      }
+
+    if (combo >= 2) {
+      score *= combo;
+      setComboText(combo);
+      setTimeout(() => setComboText(false), 2000);
+    }
+
+    if (score > 0)
+      setScore(prev => prev + score);
 
     setGrid([...grid]);
     return true;
@@ -52,5 +68,6 @@ export default function Main() {
       <Block placeBlock={placeBlock} n={1} />
       <Block placeBlock={placeBlock} n={2} />
     </div>
+    {comboText && <h3>Combo {comboText}x</h3>}
   </>);
 }
