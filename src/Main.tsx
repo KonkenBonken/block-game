@@ -76,6 +76,7 @@ export default function Main() {
 
   function restart() {
     setGrid(emptyGrid);
+    setScore(0);
   }
 
   return (<>
