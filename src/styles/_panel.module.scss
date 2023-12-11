@@ -5,15 +5,29 @@
   left: 0;
   width: calc((100vw - 90vh) * 0.6);
   height: 100vh;
-  background-color: darken(#EEE7DA, 15);
-  
+  background-color: darken(#eee7da, 15);
+
   > h1 {
-    font-family: 'Holtwood One SC',sans-serif;
+    font-family: 'Holtwood One SC', sans-serif;
     font-size: min(10vh, calc((100vw - 90vh) * 0.6) * 0.21);
-    color: darken(#88AB8E, 20);
+    color: darken(#88ab8e, 20);
     height: 10vh;
     margin: 5vh 0 5vh 0;
     line-height: 1;
     text-align: center;
+  }
+
+  > .restart {
+    cursor: pointer;
+    position: absolute;
+    bottom: 2vmin;
+    left: 2vmin;
+    filter: saturate(100%) invert(45%) sepia(6%) saturate(1879%)
+      hue-rotate(78deg) brightness(94%) contrast(90%);
+    transition: rotate ease-in-out 0.2s;
+
+    &:hover {
+      rotate: 35deg;
+    }
   }
 }

@@ -3,9 +3,12 @@ import React, { useState } from 'react';
 import scss from './styles/_panel.module.scss';
 import Board from './components/Board';
 import Block from './components/Block';
+import Restart from './components/Restart';
+
+const emptyGrid = (): (boolean | 'destroyed')[][] => Array(10).fill(0).map(() => Array(10).fill(false));
 
 export default function Main() {
-  const [grid, setGrid] = useState<(boolean | 'destroyed')[][]>(Array(10).fill(0).map(() => Array(10).fill(false)));
+  const [grid, setGrid] = useState(emptyGrid);
 
   function placeBlock(shape: boolean[][], x: number, y: number) {
     for (let row = 0; row < shape.length; row++)
@@ -40,6 +43,10 @@ export default function Main() {
     return true;
   }
 
+  function restart() {
+    setGrid(emptyGrid);
+  }
+
   return (<>
     <Board grid={grid} />
     <div className={scss.panel}>
@@ -47,6 +54,7 @@ export default function Main() {
       <Block placeBlock={placeBlock} n={0} />
       <Block placeBlock={placeBlock} n={1} />
       <Block placeBlock={placeBlock} n={2} />
+      <Restart restart={restart} />
     </div>
   </>);
 }
