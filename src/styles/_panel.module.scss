@@ -30,23 +30,52 @@
 
 h3 {
   position: fixed;
-  font-size: 10vmin;
   white-space: nowrap;
   left: calc((100vmax - 90vmin) * 0.7);
   top: 5vmin;
   width: 90vmin;
   height: 90vmin;
   line-height: 90vmin !important;
-  animation: combo ease-out .5s both alternate 2;
+  pointer-events: none;
 
-  @keyframes combo {
-    from {
-      scale: 0;
-      rotate: 5deg
+  &.combo {
+    font-size: 10vmin;
+    animation: combo ease-out 0.5s both alternate 2;
+
+    @keyframes combo {
+      from {
+        scale: 0;
+        rotate: 5deg;
+      }
+      70%,
+      to {
+        scale: 1;
+        rotate: -20deg;
+      }
     }
-    70%, to {
-      scale: 1;
-      rotate: -20deg;
+  }
+
+  &.score {
+    font-size: 7.5vmin;
+    animation: score ease-in-out 1s both;
+
+    @keyframes score {
+      from,
+      to {
+        scale: 0;
+      }
+
+      30%,
+      50% {
+        scale: 1;
+        left: calc((100vmax - 90vmin) * 0.7);
+        top: 5vmin;
+      }
+
+      to {
+        left: calc((100vw - 90vh) * 0.3 - 45vmin);
+        top: calc(15vh + min(10vh, ((100vw - 90vh) * 0.6) * 0.1 - 45vmin));
+      }
     }
   }
 }

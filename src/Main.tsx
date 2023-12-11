@@ -8,7 +8,8 @@ export default function Main() {
   const [grid, setGrid] = useState<(boolean | 'destroyed')[][]>(Array(10).fill(0).map(() => Array(10).fill(false)));
 
   const [score, setScore] = useState(0),
-    [comboText, setComboText] = useState<false | number>(false);
+    [comboText, setComboText] = useState<false | number>(false),
+    [scoreText, setScoreText] = useState<false | number>(false);
 
   function placeBlock(shape: boolean[][], x: number, y: number) {
     for (let row = 0; row < shape.length; row++)
@@ -52,8 +53,11 @@ export default function Main() {
       setTimeout(() => setComboText(false), 2000);
     }
 
-    if (score > 0)
+    if (score > 0) {
       setScore(prev => prev + score);
+      setScoreText(score);
+      setTimeout(() => setScoreText(false), 1000);
+    }
 
     setGrid([...grid]);
     return true;
@@ -68,6 +72,7 @@ export default function Main() {
       <Block placeBlock={placeBlock} n={1} />
       <Block placeBlock={placeBlock} n={2} />
     </div>
-    {comboText && <h3>Combo {comboText}x</h3>}
+    {comboText && <h3 className={scss.combo}>Combo {comboText}x</h3>}
+    {scoreText && <h3 className={scss.score}>{scoreText}</h3>}
   </>);
 }
