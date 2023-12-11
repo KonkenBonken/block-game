@@ -5,15 +5,24 @@
   left: 0;
   width: calc((100vw - 90vh) * 0.6);
   height: 100vh;
-  background-color: darken(#EEE7DA, 15);
-  
-  > h1 {
-    font-family: 'Holtwood One SC',sans-serif;
-    font-size: min(10vh, calc((100vw - 90vh) * 0.6) * 0.21);
-    color: darken(#88AB8E, 20);
-    height: 10vh;
-    margin: 5vh 0 5vh 0;
+  background-color: darken(#eee7da, 15);
+
+  > h1,
+  > h6 {
+    font-family: 'Holtwood One SC', sans-serif;
+    color: darken(#88ab8e, 20);
     line-height: 1;
     text-align: center;
+    margin: 0;
+  }
+
+  > h1 {
+    font-size: min(10vh, calc((100vw - 90vh) * 0.6) * 0.21);
+    height: 10vh;
+    margin-top: 5vh;
+  }
+
+  > h6 {
+    font-size: min(5vh, calc((100vw - 90vh) * 0.6) * 0.1);
   }
 }
