@@ -7,14 +7,25 @@
   height: 100vh;
   background-color: darken(#eee7da, 15);
 
-  > h1 {
+  > h1,
+  > h6,
+  ~ h3 {
     font-family: 'Holtwood One SC', sans-serif;
+    color: darken(#88ab8e, 20);
+    line-height: 1;
+    text-align: center;
+    margin: 0;
+  }
+
+  > h1 {
     font-size: min(10vh, calc((100vw - 90vh) * 0.6) * 0.21);
     color: darken(#88ab8e, 20);
     height: 10vh;
-    margin: 5vh 0 5vh 0;
-    line-height: 1;
-    text-align: center;
+    margin-top: 5vh;
+  }
+
+  > h6 {
+    font-size: min(5vh, calc((100vw - 90vh) * 0.6) * 0.1);
   }
 
   > .restart {
@@ -22,12 +33,64 @@
     position: absolute;
     bottom: 2vmin;
     left: 2vmin;
-    filter: saturate(100%) invert(45%) sepia(6%) saturate(1879%)
-      hue-rotate(78deg) brightness(94%) contrast(90%);
+    filter: saturate(100%) invert(45%) sepia(6%) saturate(1879%) hue-rotate(78deg)
+    brightness(94%) contrast(90%);
     transition: rotate ease-in-out 0.2s;
-
+    
     &:hover {
       rotate: 35deg;
+    }
+  }
+}
+
+h3 {
+  position: fixed;
+  white-space: nowrap;
+  left: calc((100vmax - 90vmin) * 0.7);
+  top: 5vmin;
+  width: 90vmin;
+  height: 90vmin;
+  line-height: 90vmin !important;
+  pointer-events: none;
+
+  &.combo {
+    font-size: 10vmin;
+    animation: combo ease-out 0.5s both alternate 2;
+
+    @keyframes combo {
+      from {
+        scale: 0;
+        rotate: 5deg;
+      }
+      70%,
+      to {
+        scale: 1;
+        rotate: -20deg;
+      }
+    }
+  }
+
+  &.score {
+    font-size: 7.5vmin;
+    animation: score ease-in-out 1s both;
+
+    @keyframes score {
+      from,
+      to {
+        scale: 0;
+      }
+
+      30%,
+      50% {
+        scale: 1;
+        left: calc((100vmax - 90vmin) * 0.7);
+        top: 5vmin;
+      }
+
+      to {
+        left: calc((100vw - 90vh) * 0.3 - 45vmin);
+        top: calc(15vh + min(10vh, ((100vw - 90vh) * 0.6) * 0.1 - 45vmin));
+      }
     }
   }
 }
