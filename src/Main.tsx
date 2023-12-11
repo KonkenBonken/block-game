@@ -54,11 +54,15 @@ export default function Main() {
     }
 
     if (score > 0) {
-      setScore(prev => prev + score);
       if (scoreText === false) {
         setScoreText(score);
-        setTimeout(() => setScoreText(false), 1000);
+        setTimeout(() => {
+          setScoreText(false);
+          setScore(prev => prev + score);
+        }, 1000);
       }
+      else
+        setScore(prev => prev + score);
     }
 
     setGrid([...grid]);
