@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocalStorage } from '@uidotdev/usehooks';
 
 import scss from './styles/_panel.module.scss';
 import Board from './components/Board';
@@ -9,7 +10,7 @@ const emptyGrid = (): (boolean | 'destroyed')[][] => Array(10).fill(0).map(() =>
 
 export default function Main() {
   const [grid, setGrid] = useState(emptyGrid);
-  const [highScore, saveHighScore] = useState(-Infinity);
+  const [highScore, saveHighScore] = useLocalStorage('highScore', -Infinity);
 
   const [score, setScore] = useState(0),
     [comboText, setComboText] = useState<false | number>(false),
