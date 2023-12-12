@@ -9,6 +9,7 @@ const emptyGrid = (): (boolean | 'destroyed')[][] => Array(10).fill(0).map(() =>
 
 export default function Main() {
   const [grid, setGrid] = useState(emptyGrid);
+  const [highScore, saveHighScore] = useState(-Infinity);
 
   const [score, setScore] = useState(0),
     [comboText, setComboText] = useState<false | number>(false),
@@ -64,10 +65,15 @@ export default function Main() {
         setTimeout(() => {
           setScoreText(false);
           setScore(prev => prev + score);
+          if (score > highScore)
+            saveHighScore(score);
         }, 1000);
       }
-      else
+      else {
         setScore(prev => prev + score);
+        if (score > highScore)
+          saveHighScore(score);
+      }
     }
 
     setGrid([...grid]);
