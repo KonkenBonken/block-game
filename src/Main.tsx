@@ -16,6 +16,13 @@ export default function Main() {
     [comboText, setComboText] = useState<false | number>(false),
     [scoreText, setScoreText] = useState<false | number>(false);
 
+  const increaseScore = (add: number) => setScore(prev => {
+    const newScore = prev + add;
+    if (newScore > highScore)
+      saveHighScore(score);
+    return newScore;
+  });
+
   function placeBlock(shape: boolean[][], x: number, y: number) {
     for (let row = 0; row < shape.length; row++)
       for (let cell = 0; cell < shape[row].length; cell++)
@@ -65,16 +72,11 @@ export default function Main() {
         setScoreText(score);
         setTimeout(() => {
           setScoreText(false);
-          setScore(prev => prev + score);
-          if (score > highScore)
-            saveHighScore(score);
+          increaseScore(score);
         }, 1000);
       }
-      else {
-        setScore(prev => prev + score);
-        if (score > highScore)
-          saveHighScore(score);
-      }
+      else
+        increaseScore(score);
     }
 
     setGrid([...grid]);
