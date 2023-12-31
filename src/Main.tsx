@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import CountUp from 'react-countup';
+import { useLocalStorage } from '@uidotdev/usehooks';
 
 import scss from './styles/_panel.module.scss';
 import Board from './components/Board';
@@ -10,10 +11,18 @@ const emptyGrid = (): (boolean | 'destroyed')[][] => Array(10).fill(0).map(() =>
 
 export default function Main() {
   const [grid, setGrid] = useState(emptyGrid);
+  const [highScore, saveHighScore] = useLocalStorage('highScore', -Infinity);
 
   const [[lastScore, score], setScore] = useState<[number, number]>([0, 0]),
     [comboText, setComboText] = useState<false | number>(false),
     [scoreText, setScoreText] = useState<false | number>(false);
+
+  const increaseScore = (add: number) => setScore(([, prev]) => {
+    const newScore = prev + add;
+    if (newScore > highScore)
+      saveHighScore(newScore);
+    return [prev, newScore];
+  });
 
   function placeBlock(shape: boolean[][], x: number, y: number) {
     for (let row = 0; row < shape.length; row++)
@@ -64,11 +73,11 @@ export default function Main() {
         setScoreText(score);
         setTimeout(() => {
           setScoreText(false);
-          setScore(([, prev]) => [prev, prev + score]);
+          increaseScore(score);
         }, 1000);
       }
       else
-        setScore(([, prev]) => [prev, prev + score]);
+        increaseScore(score);
     }
 
     setGrid([...grid]);
