@@ -19,7 +19,7 @@ export default function Main() {
   const increaseScore = (add: number) => setScore(prev => {
     const newScore = prev + add;
     if (newScore > highScore)
-      saveHighScore(score);
+      saveHighScore(newScore);
     return newScore;
   });
 
