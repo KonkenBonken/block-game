@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import CountUp from 'react-countup';
 import { useLocalStorage } from '@uidotdev/usehooks';
 
 import scss from './styles/_panel.module.scss';
@@ -12,15 +13,15 @@ export default function Main() {
   const [grid, setGrid] = useState(emptyGrid);
   const [highScore, saveHighScore] = useLocalStorage('highScore', -Infinity);
 
-  const [score, setScore] = useState(0),
+  const [[lastScore, score], setScore] = useState<[number, number]>([0, 0]),
     [comboText, setComboText] = useState<false | number>(false),
     [scoreText, setScoreText] = useState<false | number>(false);
 
-  const increaseScore = (add: number) => setScore(prev => {
+  const increaseScore = (add: number) => setScore(([, prev]) => {
     const newScore = prev + add;
     if (newScore > highScore)
       saveHighScore(newScore);
-    return newScore;
+    return [prev, newScore];
   });
 
   function placeBlock(shape: boolean[][], x: number, y: number) {
@@ -85,14 +86,17 @@ export default function Main() {
 
   function restart() {
     setGrid(emptyGrid);
-    setScore(0);
+    setScore([0, 0]);
   }
 
   return (<>
     <Board grid={grid} />
     <div className={scss.panel}>
       <h1>Blockz</h1>
-      <h6>{score}</h6>
+      <CountUp
+        start={lastScore} end={score}
+        duration={1} separator="&thinsp;"
+      />
       <Block placeBlock={placeBlock} n={0} />
       <Block placeBlock={placeBlock} n={1} />
       <Block placeBlock={placeBlock} n={2} />
