@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import CountUp from 'react-countup';
 
 import scss from './styles/_panel.module.scss';
 import Board from './components/Board';
@@ -10,7 +11,7 @@ const emptyGrid = (): (boolean | 'destroyed')[][] => Array(10).fill(0).map(() =>
 export default function Main() {
   const [grid, setGrid] = useState(emptyGrid);
 
-  const [score, setScore] = useState(0),
+  const [[lastScore, score], setScore] = useState<[number, number]>([0, 0]),
     [comboText, setComboText] = useState<false | number>(false),
     [scoreText, setScoreText] = useState<false | number>(false);
 
@@ -63,11 +64,11 @@ export default function Main() {
         setScoreText(score);
         setTimeout(() => {
           setScoreText(false);
-          setScore(prev => prev + score);
+          setScore(([, prev]) => [prev, prev + score]);
         }, 1000);
       }
       else
-        setScore(prev => prev + score);
+        setScore(([, prev]) => [prev, prev + score]);
     }
 
     setGrid([...grid]);
@@ -76,14 +77,17 @@ export default function Main() {
 
   function restart() {
     setGrid(emptyGrid);
-    setScore(0);
+    setScore([0, 0]);
   }
 
   return (<>
     <Board grid={grid} />
     <div className={scss.panel}>
       <h1>Blockz</h1>
-      <h6>{score}</h6>
+      <CountUp
+        start={lastScore} end={score}
+        duration={1} separator="&thinsp;"
+      />
       <Block placeBlock={placeBlock} n={0} />
       <Block placeBlock={placeBlock} n={1} />
       <Block placeBlock={placeBlock} n={2} />
